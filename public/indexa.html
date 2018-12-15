@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>	
+<style>
+#output {
+  margin: auto;
+  width: 60%;
+  border: 1px solid green;
+  padding: 30px;  
+}  	
+
+#demo {
+  margin: auto;
+  width: 60%;
+  border: 1px solid green;
+  padding: 30px;  
+} 
+
+
+#thatcycle {
+  margin: auto;
+  width: 60%;
+  border: 1px solid green;
+  padding: 30px;  
+} 
+
+#thiscycle {
+  margin: auto;
+  width: 60%;
+  border: 1px solid green;
+  padding: 30px;  
+} 
+
+
+#totgals {
+  margin: auto;
+  width: 60%;
+  border: 1px solid green;
+  padding: 30px;  
+} 
+
+
+#input {
+  margin: auto;
+  width: 60%;
+  border: 1px solid green;
+  padding: 30px;  
+} 
+.center {
+  text-align: center;
+} 	  		
+body {background-color: lightgrey;}	
+h1   {color: blue;}
+p    {color: red;}
+
+</style>
+</head>	
+<body>
+<div class="center">	
+  <h1>Phil's oil burner</h1>
+</div> 
+
+<div class="center"> 
+	
+  <p id="demo"> I hope this worked</p>	
+  <p id="thiscycle">placeholder</p>
+  <p id="thatcycle">placeholder</p>	
+  <p id="input"> NOT A DAM placeholder</p>
+  <p id="mytime"> Project start time</p>
+  <p id="totgals"> Total Gallons placeholder</p>
+  
+  
+</div>
+
+
+<p><input type="checkbox" id="light"></p>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script> <!-- include socket.io client side script -->
+//<link href="/styles.css" rel="stylesheet"/> 
+
+
+
+
+
+
+<script>
+var socket = io(); //load socket.io-client and connect to the host that serves the page
+window.addEventListener("load", function(){ //when page loads
+  var lightbox = document.getElementById("light"); 
+  lightbox.addEventListener("change", function() { //add event listener for when checkbox changes
+    socket.emit("light", Number(this.checked)); //send button status to server (as 1 or 0)
+    
+  });
+});
+socket.on('light', function (data) { //get button status from client
+  document.getElementById("light").checked = data; //change checkbox according to push button on Raspberry Pi
+  socket.emit("light", data); //send push button status to back to server
+    
+  document.getElementById("thiscycle").innerHTML = "Boiler is firing";
+  
+});
+
+
+
+
+socket.on("mess", function(data) {
+  document.getElementById('demo').innerHTML = data;//watching for my new socket
+});
+
+
+socket.on("TotMess", function(data){
+  var xx = data.words + data.secs;
+  document.getElementById("input").innerHTML = xx;
+});  
+
+
+socket.on("thiscycle", function(data){
+  var xx = data.words + data.secs;
+  document.getElementById("thiscycle").innerHTML = xx;
+});  
+  
+socket.on("thatcycle", function(data){
+  var xx = data.words + data.secs;
+  document.getElementById("thatcycle").innerHTML = xx;  
+});  
+
+socket.on("mytime", function(data){
+  var xx = data.words + data.secs;
+  document.getElementById("mytime").innerHTML = xx;
+
+});
+
+  
+socket.on("totgals", function(data){
+  var xx = data.words + data.secs;
+  document.getElementById("totgals").innerHTML = xx;  
+
+});
+
+</script>
+<script>
+
+
+
+	
+</script>
+
+
+
+
+
+</html>
+</body>
+</html>
+
